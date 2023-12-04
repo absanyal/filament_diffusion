@@ -1,0 +1,10 @@
+*
+!src/
+!.gitignore
+!*.cpp
+!Makefile*
+!*.h
+!*.hpp
+!template*
+!*.py
+!*gp
