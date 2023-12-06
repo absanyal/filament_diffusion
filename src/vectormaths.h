@@ -18,7 +18,7 @@ string printvec(vd const &v)
         {
             result += ", ";
         }
-        result +=  to_string(v[i]);
+        result += to_string(v[i]);
     }
     result += ") ";
     return result;
@@ -46,7 +46,8 @@ vd operator-(vd const &v1, vd const &v2)
     return result;
 }
 
-vd operator-(vd const & v){
+vd operator-(vd const &v)
+{
     vd result(v.size());
     for (int i = 0; i < v.size(); i++)
     {
@@ -75,7 +76,6 @@ vd operator*(double const &a, vd const &v)
     return result;
 }
 
-
 double dot(vd const &v1, vd const &v2)
 {
     assert(v1.size() == v2.size());
@@ -88,12 +88,23 @@ double dot(vd const &v1, vd const &v2)
     return result;
 }
 
-double norm(vd const &v){
-    return sqrt( dot(v, v) );
+double norm(vd const &v)
+{
+    return sqrt(dot(v, v));
 }
 
-vd normalize(vd const &v){
-    return (1.0 / (norm(v)) ) * v;
+vd normalize(vd const &v)
+{
+    double prefactor;
+    if (norm(v) != 0.0)
+    {
+        prefactor =  (1.0 / (norm(v)));
+    }
+    else
+    {
+        prefactor = 1.0;
+    }
+    return prefactor * v;
 }
 
 #endif

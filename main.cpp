@@ -49,35 +49,38 @@ parameters prm;
 
 int main()
 {
-    filament f1(5, 0.2, 2.0);
+    vd f1start, f1head, ds;
+    f1start.resize(3);
+    f1head.resize(3);
+    ds.resize(3);
 
-    for (int i = 0; i < f1.size(); i++)
+    f1start = {0.0, 0.0, 0.0};
+
+    f1head = {-1.0, 0.0, 0.0};
+
+    ds = {0.0, 1.3, 1.1};
+
+    filament f1(5, 0.5, 1.0, f1start, f1head);
+
+    for (int i = 0; i < f1.length(); i++)
     {
-        f1.monomers[i].radius = 1.3 * i;
-        cout << "i = " << i
-             << " radius = " << f1.monomers[i].radius
-             << " mass = " << f1.monomers[i].mass << endl;
-        cout
-            << " force = " << printvec(f1.monomers[i].force)
-            << endl;
+        cout << i << " " << printvec(f1.monomers[i].pos) << endl;
     }
-    cout << "Total mass = " << f1.totalmass() << endl;
+    cout << "Monomers = " << f1.length() << endl;
+    cout << "Contour length = " << f1.contour_length() << endl;
+    cout << "CoM = " << printvec(f1.get_CoM()) << endl;
 
-    f1.monomers.erase(f1.monomers.begin() + 1);
-    f1.monomers[3].mass = 1000.232;
-    f1.monomers[2].set_force(0.1, 3.4, -21.003);
+    cout << "=======TRANSFORMING=======" << endl;
+    // f1.displace_filament(ds);
+    f1.add_at_beginning(0.5, 1.0);
+    f1.remove_at_end();
 
-    cout << "AFTER ERASING AND CHANGING" << endl;
 
-    for (int i = 0; i < f1.size(); i++)
+    for (int i = 0; i < f1.length(); i++)
     {
-        cout << "i = " << i
-             << " radius = " << f1.monomers[i].radius
-             << " mass = " << f1.monomers[i].mass << endl;
-        cout
-            << " force = " << printvec(f1.monomers[i].force)
-            << endl;
+        cout << i << " " << printvec(f1.monomers[i].pos) << endl;
     }
-
-    cout << "Total mass = " << f1.totalmass() << endl;
+    cout << "Monomers = " << f1.length() << endl;
+    cout << "Contour length = " << f1.contour_length() << endl;
+    cout << "CoM = " << printvec(f1.get_CoM()) << endl;
 }

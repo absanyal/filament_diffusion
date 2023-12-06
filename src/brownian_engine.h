@@ -11,7 +11,7 @@ private:
     double _dt, _D, _kB, _T, _seed;
 
 public:
-    double displacement(vd);
+    double coordinate_displacement(double);
 
     brownian_engine(double dt, double D, double kB, double T, int seed)
     {
@@ -26,14 +26,12 @@ public:
     }
 };
 
-double brownian_engine::displacement(vd _Fcons)
+double brownian_engine::coordinate_displacement(double _Fcons)
 {
-    double dr;
+    double displacement;
     double c1, c2;
 
-    c1 = _D / (_kB * _T);
-
-    return dr;
+    return displacement;
 }
 
 #endif
