@@ -8,8 +8,8 @@
 #include "vectormaths.h"
 #include "monomer.h"
 
-#define T 0
-#define R 1
+#define T_state 0
+#define R_state 1
 
 class ftsz : public monomer
 {

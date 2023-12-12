@@ -98,13 +98,46 @@ vd normalize(vd const &v)
     double prefactor;
     if (norm(v) != 0.0)
     {
-        prefactor =  (1.0 / (norm(v)));
+        prefactor = (1.0 / (norm(v)));
     }
     else
     {
         prefactor = 1.0;
     }
     return prefactor * v;
+}
+
+vd cross3D(vd a, vd b)
+{
+    assert(a.size() == b.size());
+    assert(a.size() == 3);
+    double a1, a2, a3, b1, b2, b3;
+    vd result;
+    a1 = a[0];
+    a2 = a[1];
+    a3 = a[2];
+    b1 = b[0];
+    b2 = b[1];
+    b3 = b[2];
+    result.resize(3);
+    result[0] = a2 * b3 - a3 * b2;
+    result[1] = a3 * b1 - a1 * b3;
+    result[2] = a1 * b2 - a2 * b1;
+    return result;
+}
+
+vd convertbasis(vd start_vec, vd x, vd y, vd z, vd X, vd Y, vd Z)
+{
+    vd exp_x, exp_y, exp_z, result;
+    exp_x = (dot(X, x)) * X + (dot(Y, x)) * Y + (dot(Z, x)) * Z;
+    exp_y = (dot(X, y)) * X + (dot(Y, y)) * Y + (dot(Z, y)) * Z;
+    exp_z = (dot(X, z)) * X + (dot(Y, z)) * Y + (dot(Z, z)) * Z;
+
+    result = start_vec[0] * exp_x +
+             start_vec[1] * exp_y +
+             start_vec[2] * exp_z;
+
+    return result;
 }
 
 #endif

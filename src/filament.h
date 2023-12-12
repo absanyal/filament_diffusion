@@ -10,7 +10,7 @@ using namespace std;
 class filament
 {
 private:
-    vector<double> start_coord;
+    vector<double> start_coord, _face;
 
 public:
     vector<ftsz> monomers;
@@ -24,19 +24,36 @@ public:
     void add_at_beginning(double, double);
     void remove_at_end();
     vd get_CoM();
+    vd face();
 
     filament(int length, double radius, double mass, vd start_vector, vd heading_vector)
     {
         monomers.resize(length);
         heading.resize(3);
+        _face.resize(3);
         force.resize(3);
         start_coord.resize(3);
 
         assert(start_coord.size() == start_vector.size());
         start_coord = start_vector;
 
+        // assert(dot(heading_vector, face_vector) == 0.0);
+
         assert(heading.size() == heading_vector.size());
         heading = normalize(heading_vector);
+        assert(norm(heading) > 0.0);
+
+        if (heading[0] != 0.0){
+            _face = {-(heading[1] + heading[2])/heading[0], 1, 1 };
+        }
+        if ( heading[0] == 0 && heading[1] != 0 ){
+            _face = {1, - heading[2] / heading[1], 1 };
+        }
+        if (heading[0] == 0 && heading[1] == 0){
+            _face = {1.0, 0.0, 0.0};
+        }
+
+        _face = normalize(_face);
 
         for (int i = 0; i < monomers.size(); i++)
         {
@@ -93,28 +110,39 @@ void filament::displace_filament(vd displacement_vector)
     {
         monomers[i].pos = monomers[i].pos + displacement_vector;
     }
+    start_coord = start_coord + displacement_vector;
 }
 
 void filament::add_at_beginning(double radius, double mass)
 {
-    monomers.insert(monomers.begin(), ftsz(radius, mass));
-    monomers[0].pos = start_coord + (monomers[0].radius + monomers[1].radius) * heading;
+    ftsz new_monomer(radius, mass);
+    new_monomer.pos = start_coord + (monomers[1].radius + new_monomer.radius) * heading;
+    monomers.insert(monomers.begin(), new_monomer);
+    start_coord = new_monomer.pos;
+    // cout << "Adding at: " << printvec(new_monomer.pos) << endl;
 }
 
-void filament::remove_at_end(){
+void filament::remove_at_end()
+{
     monomers.pop_back();
 }
 
-vd filament::get_CoM(){
+vd filament::get_CoM()
+{
     vd CoM;
     CoM.resize(3);
 
-    for (int i=0; i < length(); i++){
-        CoM = CoM + ( monomers[i].mass * monomers[i].pos );
+    for (int i = 0; i < length(); i++)
+    {
+        CoM = CoM + (monomers[i].mass * monomers[i].pos);
     }
 
     CoM = (1.0 / totalmass()) * CoM;
     return CoM;
+}
+
+vd filament::face(){
+    return _face;
 }
 
 #endif

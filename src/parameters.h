@@ -17,26 +17,16 @@ public:
     int seed;
 
     int length;
-
-    // float r;
+    double radius, mass;
 
     int iterations;
     float dt;
 
-    float LJ_e, LJ_sigma, LJ_rc;
-    float bond_k, bond_r0;
-
-    float D;
+    float D_par, D_perp, D_rot;
 
     float kB, T;
 
     int steps_to_skip;
-
-    // float xlo, xhi, ylo, yhi, zlo, zhi;
-
-    int bond_break_message, stop_on_breakage;
-
-    // float eta;
 
     double matchstring(string, string);
     string matchstring2(string, string);
@@ -116,40 +106,20 @@ void parameters::load(string inputfile)
     seed = matchstring(inputfile, "seed");
 
     length = matchstring(inputfile, "length");
-
-    // xlo = matchstring(inputfile, "xlo");
-    // xhi = matchstring(inputfile, "xhi");
-
-    // ylo = matchstring(inputfile, "ylo");
-    // yhi = matchstring(inputfile, "yhi");
-
-    // zlo = matchstring(inputfile, "zlo");
-    // zhi = matchstring(inputfile, "zhi");
-    
-
-    // r = matchstring(inputfile, "r");
+    radius = matchstring(inputfile, "radius");
+    mass = matchstring(inputfile, "mass");
 
     iterations = matchstring(inputfile, "iterations");
     dt = matchstring(inputfile, "dt");
 
-    D = matchstring(inputfile, "D");
+    // D_par = matchstring(inputfile, "D_par");
+    // D_perp = matchstring(inputfile, "D_perp");
+    // D_rot = matchstring(inputfile, "D_rot");
 
     kB = matchstring(inputfile, "kB");
     T = matchstring(inputfile, "T");
 
-    // eta = matchstring(inputfile, "eta");
-
-    LJ_e = matchstring(inputfile, "LJ_e");
-    LJ_sigma = matchstring(inputfile, "LJ_sigma");
-    LJ_rc = matchstring(inputfile, "LJ_rc");
-
-    bond_k = matchstring(inputfile, "bond_k");
-    bond_r0 = matchstring(inputfile, "bond_r0");
-
     steps_to_skip = matchstring(inputfile, "steps_to_skip");
-
-    bond_break_message = matchstring(inputfile, "bond_break_message");
-    stop_on_breakage = matchstring(inputfile, "stop_on_breakage");
 }
 
 #endif
