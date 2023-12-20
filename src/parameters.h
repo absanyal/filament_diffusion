@@ -26,6 +26,8 @@ public:
 
     float kB, T;
 
+    double xhi, xlo, cell_radius;
+
     int steps_to_skip;
 
     double matchstring(string, string);
@@ -112,9 +114,13 @@ void parameters::load(string inputfile)
     iterations = matchstring(inputfile, "iterations");
     dt = matchstring(inputfile, "dt");
 
-    // D_par = matchstring(inputfile, "D_par");
-    // D_perp = matchstring(inputfile, "D_perp");
-    // D_rot = matchstring(inputfile, "D_rot");
+    D_par = matchstring(inputfile, "D_par");
+    D_perp = matchstring(inputfile, "D_perp");
+    D_rot = matchstring(inputfile, "D_rot");
+
+    xlo = matchstring(inputfile, "xlo");
+    xhi = matchstring(inputfile, "xhi");
+    cell_radius = matchstring(inputfile, "cell_radius");
 
     kB = matchstring(inputfile, "kB");
     T = matchstring(inputfile, "T");

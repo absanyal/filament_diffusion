@@ -4,25 +4,26 @@
 #include <vector>
 #include <cassert>
 #include <cmath>
+#include <iostream>
 
 using namespace std;
 typedef vector<double> vd;
 
-string printvec(vd const &v)
-{
-    string result;
-    result = "(";
-    for (int i = 0; i < v.size(); i++)
-    {
-        if (i > 0)
-        {
-            result += ", ";
-        }
-        result += to_string(v[i]);
-    }
-    result += ") ";
-    return result;
-}
+// string printvec(vd const &v)
+// {
+//     string result;
+//     result = "(";
+//     for (int i = 0; i < v.size(); i++)
+//     {
+//         if (i > 0)
+//         {
+//             result += ", ";
+//         }
+//         result += to_string(v[i]);
+//     }
+//     result += ") ";
+//     return result;
+// }
 
 vd operator+(vd const &v1, vd const &v2)
 {
@@ -74,6 +75,23 @@ vd operator*(double const &a, vd const &v)
         result[i] = a * v[i];
     }
     return result;
+}
+
+vd operator/(vd const &v, double const &a)
+{
+    vd result(v.size());
+    for (int i = 0; i < result.size(); i++)
+    {
+        result[i] = (1.0 / a) * v[i];
+    }
+    return result;
+}
+
+ostream &operator<<(ostream &os, vd const &a)
+{
+    os << "(" << a[0] << ", " << a[1] << ", " << a[2]
+       << ")";
+    return os;
 }
 
 double dot(vd const &v1, vd const &v2)

@@ -4,6 +4,10 @@
 #include <vector>
 #include "vectormaths.h"
 #include "ftsz.h"
+#include "quaternion.h"
+#include <string>
+
+#define PI acos(-1.0)
 
 using namespace std;
 
@@ -23,6 +27,7 @@ public:
     void displace_filament(vd);
     void add_at_beginning(double, double);
     void remove_at_end();
+    void rotate_filament(double, string, bool);
     vd get_CoM();
     vd face();
 
@@ -37,19 +42,20 @@ public:
         assert(start_coord.size() == start_vector.size());
         start_coord = start_vector;
 
-        // assert(dot(heading_vector, face_vector) == 0.0);
-
         assert(heading.size() == heading_vector.size());
         heading = normalize(heading_vector);
         assert(norm(heading) > 0.0);
 
-        if (heading[0] != 0.0){
-            _face = {-(heading[1] + heading[2])/heading[0], 1, 1 };
+        if (heading[0] != 0.0)
+        {
+            _face = {-(heading[1] + heading[2]) / heading[0], 1, 1};
         }
-        if ( heading[0] == 0 && heading[1] != 0 ){
-            _face = {1, - heading[2] / heading[1], 1 };
+        if (heading[0] == 0 && heading[1] != 0)
+        {
+            _face = {1, -heading[2] / heading[1], 1};
         }
-        if (heading[0] == 0 && heading[1] == 0){
+        if (heading[0] == 0 && heading[1] == 0)
+        {
             _face = {1.0, 0.0, 0.0};
         }
 
@@ -141,8 +147,75 @@ vd filament::get_CoM()
     return CoM;
 }
 
-vd filament::face(){
+vd filament::face()
+{
     return _face;
+}
+
+void filament::rotate_filament(double angle, string local_axis /*axis = x,y,z*/, bool degree = true)
+{
+    if (degree == true)
+    {
+        angle = angle * (PI / 180);
+    }
+
+    vd x, y, z, X, Y, Z;
+    vd axis;
+    vd CoM_fixed;
+
+    X = {1.0, 0.0, 0.0};
+    Y = {0.0, 1.0, 0.0};
+    Z = {0.0, 0.0, 1.0};
+
+    z = heading;
+    x = _face;
+    y = cross3D(z, x) / norm(cross3D(z, x));
+
+    CoM_fixed = get_CoM();
+
+    if (local_axis == "x")
+    {
+        axis = x;
+    }
+    else if (local_axis == "y")
+    {
+        axis = y;
+    }
+    else if (local_axis == "z")
+    {
+        axis = z;
+    }
+    else
+    {
+        axis = {0.0, 0.0, 0.0};
+    }
+
+    quaternion q, p, p_prime;
+    vd current_pos_local, current_pos_global;
+
+    // Set the rotation quaternion
+    q.scalar = cos(angle / 2.0);
+    q.vector = sin(angle / 2.0) * axis;
+
+    // Rotate the heading vector
+    p.set_components(0.0, heading);
+    p_prime = q * p * q.inverse();
+    heading = p_prime.vector;
+
+    // Rotate the face vector
+    p.set_components(0.0, _face);
+    p_prime = q * p * q.inverse();
+    _face = p_prime.vector;
+
+    //Rotate every monomer in the filament
+    for (int i = 0; i < length(); i++)
+    {
+        p.set_components(0.0, monomers[i].pos - CoM_fixed);
+        p_prime = q * p * q.inverse();
+        monomers[i].pos = p_prime.vector + CoM_fixed;
+    }
+
+    start_coord = monomers[0].pos;
 }
 
 #endif
