@@ -37,6 +37,8 @@ vd X = {1.0, 0.0, 0.0};
 vd Y = {0.0, 1.0, 0.0};
 vd Z = {0.0, 0.0, 1.0};
 
+int wasted_steps = 0;
+
 bool check_inside_cylinder(double R, vd rA, vd rB, vd rP)
 {
      vd e, m, rQ;
@@ -81,22 +83,6 @@ double brownian_translate(double F_cons_component, double D)
      return c1 * F_cons_component * prm.dt + c2 * W;
 }
 
-void dump_positions(filament f, ofstream &dumpfile, string filament_label, string monomer_label)
-{
-     dumpfile << f.length() + 7 << endl;
-     dumpfile << filament_label << endl;
-     for (int i = 0; i < f.length(); i++)
-     {
-          dumpfile << monomer_label
-                   << " "
-                   << f.monomers[i].pos[0] << " "
-                   << f.monomers[i].pos[1] << " "
-                   << f.monomers[i].pos[2] << " "
-                   << f.monomers[i].radius << " "
-                   << endl;
-     }
-}
-
 void dump_box(ostream &dump)
 {
      vd rxlo, rxhi, rylo, ryhi, rzlo, rzhi;
@@ -125,6 +111,34 @@ void dump_box(ostream &dump)
           << rzhi[0] << " " << rzhi[1] << " " << rzhi[2] << " 0.5" << endl;
 }
 
+void dump_positions(filament f, ofstream &dumpfile, string filament_label, string monomer_label, bool box = true)
+{
+     if (box == true)
+     {
+          dumpfile << f.length() + 7 << endl;
+     }
+     else
+     {
+          dumpfile << f.length() << endl;
+     }
+     dumpfile << filament_label << endl;
+     for (int i = 0; i < f.length(); i++)
+     {
+          dumpfile << monomer_label
+                   << " "
+                   << f.monomers[i].pos[0] << " "
+                   << f.monomers[i].pos[1] << " "
+                   << f.monomers[i].pos[2] << " "
+                   << f.monomers[i].radius << " "
+                   << endl;
+     }
+
+     if (box == true)
+     {
+          dump_box(dumpfile);
+     }
+}
+
 vd global_brownian_displacement(filament f)
 {
      vd result;
@@ -134,11 +148,6 @@ vd global_brownian_displacement(filament f)
      vd ds_local;
 
      bool proposed_ends_are_inside = false;
-
-     vd end1, end2;
-
-     end1 = f.monomers[0].pos;
-     end2 = f.monomers[f.length() - 1].pos;
 
      dx = brownian_translate(0.0, prm.D_perp);
      dy = brownian_translate(0.0, prm.D_perp);
@@ -160,12 +169,6 @@ double global_brownian_angle(filament f)
      double result;
      double d_theta;
 
-     bool proposed_ends_are_inside = false;
-
-     vd end1, end2;
-     end1 = f.monomers[0].pos;
-     end2 = f.monomers[f.length() - 1].pos;
-
      d_theta = brownian_translate(0.0, prm.D_rot);
 
      result = d_theta;
@@ -178,13 +181,46 @@ void perform_step(filament &f)
      vd ds_global;
      double d_theta_x, d_theta_y;
 
-     ds_global = global_brownian_displacement(f);
-     f.displace_filament(ds_global);
+     bool end1_in, end2_in;
+     end1_in = false;
+     end2_in = false;
 
+     vd end1, end2;
 
-     d_theta_x = global_brownian_angle(f);
-     f.rotate_filament(d_theta_x, "x");
+     vd rA, rB;
 
-     d_theta_y = global_brownian_angle(f);
-     f.rotate_filament(d_theta_y, "y");
+     rA = {prm.xlo, 0.0, 0.0};
+     rB = {prm.xhi, 0.0, 0.0};
+
+     while (end1_in == false || end2_in == false)
+     {
+          ds_global = global_brownian_displacement(f);
+          d_theta_x = global_brownian_angle(f);
+          d_theta_y = global_brownian_angle(f);
+
+          f.displace_filament(ds_global);
+          f.rotate_filament(d_theta_x, "x");
+          f.rotate_filament(d_theta_y, "y");
+
+          end1 = f.monomers[0].pos;
+          end2 = f.monomers[f.length() - 1].pos;
+
+          end1_in = check_inside_cylinder(prm.cell_radius, rA, rB, end1);
+          end2_in = check_inside_cylinder(prm.cell_radius, rA, rB, end2);
+
+          if (end1_in == false || end2_in == false)
+          {
+               f.rotate_filament(-d_theta_y, "y");
+               f.rotate_filament(-d_theta_x, "x");
+               f.displace_filament(-ds_global);
+               wasted_steps += 1;
+          }
+     }
+}
+
+void wasted_steps_stats()
+{
+     cout << "Performed steps = " << prm.iterations + wasted_steps << endl;
+     cout << "Wasted steps = " << wasted_steps << endl;
+     cout << "% of steps wasted = " << (100.0 * wasted_steps) / (1.0 * (prm.iterations + wasted_steps)) << endl;
 }

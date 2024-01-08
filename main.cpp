@@ -24,7 +24,6 @@ int main(int argc, char *argv[])
     dump.open("dump.dat");
 
     dump_positions(f1, dump, "filament1", "m1");
-    dump_box(dump);
 
     for (int t_iter = 0; t_iter < prm.iterations; t_iter++)
     {
@@ -33,9 +32,10 @@ int main(int argc, char *argv[])
         if (t_iter % prm.steps_to_skip == 0)
         {
             dump_positions(f1, dump, "filament1", "m1");
-            dump_box(dump);
         }
     }
 
     dump.close();
+
+    wasted_steps_stats();
 }

@@ -9,22 +9,6 @@
 using namespace std;
 typedef vector<double> vd;
 
-// string printvec(vd const &v)
-// {
-//     string result;
-//     result = "(";
-//     for (int i = 0; i < v.size(); i++)
-//     {
-//         if (i > 0)
-//         {
-//             result += ", ";
-//         }
-//         result += to_string(v[i]);
-//     }
-//     result += ") ";
-//     return result;
-// }
-
 vd operator+(vd const &v1, vd const &v2)
 {
     assert(v1.size() == v2.size());

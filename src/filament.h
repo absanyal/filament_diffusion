@@ -30,6 +30,7 @@ public:
     void rotate_filament(double, string, bool);
     vd get_CoM();
     vd face();
+    double radius_of_gyration();
 
     filament(int length, double radius, double mass, vd start_vector, vd heading_vector)
     {
@@ -152,7 +153,7 @@ vd filament::face()
     return _face;
 }
 
-void filament::rotate_filament(double angle, string local_axis /*axis = x,y,z*/, bool degree = true)
+void filament::rotate_filament(double angle, string local_axis, bool degree = false)
 {
     if (degree == true)
     {
@@ -207,7 +208,7 @@ void filament::rotate_filament(double angle, string local_axis /*axis = x,y,z*/,
     p_prime = q * p * q.inverse();
     _face = p_prime.vector;
 
-    //Rotate every monomer in the filament
+    // Rotate every monomer in the filament
     for (int i = 0; i < length(); i++)
     {
         p.set_components(0.0, monomers[i].pos - CoM_fixed);
@@ -216,6 +217,31 @@ void filament::rotate_filament(double angle, string local_axis /*axis = x,y,z*/,
     }
 
     start_coord = monomers[0].pos;
+}
+
+double filament::radius_of_gyration()
+{
+    double rg;
+
+    vd fixed_CoM;
+    fixed_CoM = get_CoM();
+
+    double total_mass;
+    total_mass = 0.0;
+
+    double total_moment;
+    total_moment = 0.0;
+
+    for (int i = 0; i < length(); i++)
+    {
+        total_mass += monomers[i].mass;
+
+        total_moment += monomers[i].mass * pow(norm(monomers[i].pos - fixed_CoM), 2);
+    }
+
+    rg = total_moment / total_mass;
+
+    return rg;
 }
 
 #endif

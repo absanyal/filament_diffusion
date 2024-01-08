@@ -4,7 +4,7 @@ CPPFLAGS = -std=c++11
 CPPFLAGS += -O3
 CPPFLAGS += -Isrc
 STRIP_COMMAND = true
-LDFLAGS  = -llapack #-llapacke
+LDFLAGS  = #-llapack #-llapacke
 
 $(EXENAME): clean main.o 
 	$(CXX) $(CPPFLAGS) -o $(EXENAME)  main.o $(LDFLAGS) 
