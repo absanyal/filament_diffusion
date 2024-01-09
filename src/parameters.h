@@ -33,6 +33,8 @@ public:
     double matchstring(string, string);
     string matchstring2(string, string);
     void load(string);
+
+    bool wall_collisions;
 };
 
 double parameters::matchstring(string file, string match)
@@ -126,6 +128,8 @@ void parameters::load(string inputfile)
     T = matchstring(inputfile, "T");
 
     steps_to_skip = matchstring(inputfile, "steps_to_skip");
+
+    wall_collisions = matchstring(inputfile, "wall_collisions");
 }
 
 #endif

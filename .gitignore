@@ -8,4 +8,5 @@
 !template*
 !*.py
 !*gp
+!*.sh
 test*

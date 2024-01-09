@@ -28,8 +28,9 @@
 #define milli 1E-3
 
 parameters prm;
-std::mt19937 gen(prm.seed);
-std::normal_distribution<> dis_normal(0.0, 1.0);
+std::mt19937 gen;
+bool rng_seeded = false;
+std::normal_distribution<double> dis_normal(0.0, 1.0);
 
 double axis_scale = 20.0;
 
@@ -77,6 +78,11 @@ double brownian_translate(double F_cons_component, double D)
 {
      double c1, c2;
      double W;
+     if (!rng_seeded){
+          gen.seed(prm.seed);
+          rng_seeded = true;
+     }
+     std::normal_distribution<> dis_normal(0.0, 1.0);
      W = dis_normal(gen);
      c1 = D / (prm.kB * prm.T);
      c2 = sqrt(2.0 * D * prm.dt);
@@ -147,8 +153,6 @@ vd global_brownian_displacement(filament f)
 
      vd ds_local;
 
-     bool proposed_ends_are_inside = false;
-
      dx = brownian_translate(0.0, prm.D_perp);
      dy = brownian_translate(0.0, prm.D_perp);
      dz = brownian_translate(0.0, prm.D_par);
@@ -205,8 +209,16 @@ void perform_step(filament &f)
           end1 = f.monomers[0].pos;
           end2 = f.monomers[f.length() - 1].pos;
 
-          end1_in = check_inside_cylinder(prm.cell_radius, rA, rB, end1);
-          end2_in = check_inside_cylinder(prm.cell_radius, rA, rB, end2);
+          if (prm.wall_collisions == 1)
+          {
+               end1_in = check_inside_cylinder(prm.cell_radius, rA, rB, end1);
+               end2_in = check_inside_cylinder(prm.cell_radius, rA, rB, end2);
+          }
+          else
+          {
+               end1_in = true;
+               end2_in = true;
+          }
 
           if (end1_in == false || end2_in == false)
           {
@@ -223,4 +235,17 @@ void wasted_steps_stats()
      cout << "Performed steps = " << prm.iterations + wasted_steps << endl;
      cout << "Wasted steps = " << wasted_steps << endl;
      cout << "% of steps wasted = " << (100.0 * wasted_steps) / (1.0 * (prm.iterations + wasted_steps)) << endl;
+}
+
+void CoM_displacement_sq(filament f, vd init_CoM, int iter_num, ofstream &dump)
+{
+     vd ds, current_CoM;
+     current_CoM = f.get_CoM();
+     ds = current_CoM - init_CoM;
+     dump << (1.0 * iter_num * prm.dt) << "\t"
+          << ds[0] << "\t"
+          << ds[1] << "\t"
+          << ds[2] << "\t"
+          << dot(ds, ds) << "\t"
+          << endl;
 }
