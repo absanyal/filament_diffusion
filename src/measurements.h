@@ -24,3 +24,13 @@ void CoM_displacement_sq(filament f, vd init_CoM, int iter_num, ofstream &dump)
           << dot(ds, ds) << "\t"
           << endl;
 }
+
+void time_info(){
+     double tau;
+     tau = (sigma0 * sigma0) / D_0();
+     cout << "Time scale, tau = " << tau / nano << " ns." << endl;
+     cout << "Time step = " << (tau * prm.dt) / nano << " ns." << endl;
+     double total_time;
+     total_time = prm.iterations * prm.dt * tau;
+     cout << "Total time for simulation = " << total_time / milli << " ms." << endl;
+}

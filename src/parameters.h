@@ -34,7 +34,10 @@ public:
     string matchstring2(string, string);
     void load(string);
 
+    double eta;
+
     bool wall_collisions;
+    bool manual_diffusion_constants;
 };
 
 double parameters::matchstring(string file, string match)
@@ -109,27 +112,31 @@ void parameters::load(string inputfile)
 {
     seed = matchstring(inputfile, "seed");
 
-    length = matchstring(inputfile, "length");
-    radius = matchstring(inputfile, "radius");
-    mass = matchstring(inputfile, "mass");
+    length = matchstring(inputfile, "length(subunits)");
+    radius = matchstring(inputfile, "radius(nm)");
+    mass = matchstring(inputfile, "mass(FtsZ mass)");
 
     iterations = matchstring(inputfile, "iterations");
     dt = matchstring(inputfile, "dt");
 
-    D_par = matchstring(inputfile, "D_par");
-    D_perp = matchstring(inputfile, "D_perp");
-    D_rot = matchstring(inputfile, "D_rot");
-
-    xlo = matchstring(inputfile, "xlo");
-    xhi = matchstring(inputfile, "xhi");
-    cell_radius = matchstring(inputfile, "cell_radius");
-
-    kB = matchstring(inputfile, "kB");
-    T = matchstring(inputfile, "T");
-
-    steps_to_skip = matchstring(inputfile, "steps_to_skip");
+    // kB = matchstring(inputfile, "kB");
+    T = matchstring(inputfile, "T(kelvin)");
 
     wall_collisions = matchstring(inputfile, "wall_collisions");
+
+    manual_diffusion_constants = matchstring(inputfile, "manual_diffusion_constants");
+
+    D_par = matchstring(inputfile, "D_par(micro m^2/s)");
+    D_perp = matchstring(inputfile, "D_perp(micro m^2/s)");
+    D_rot = matchstring(inputfile, "D_rot(micro m^2/s)");
+
+    eta = matchstring(inputfile, "eta(mPa s)");
+
+    xlo = matchstring(inputfile, "xlo(nm)");
+    xhi = matchstring(inputfile, "xhi(nm)");
+    cell_radius = matchstring(inputfile, "cell_radius(nm)");
+
+    steps_to_skip = matchstring(inputfile, "steps_to_skip");
 }
 
 #endif

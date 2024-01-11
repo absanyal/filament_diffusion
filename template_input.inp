@@ -1,17 +1,19 @@
-seed=3763
+seed=4197711454
 
-length=20
+length=10
 radius=2.5
 mass=1.0
 
-iterations=1000000
+iterations=100000
 dt=0.01
 
 kB=1.0
 T=1.0
 
-D_perp=1.0
-D_par=1.0
+wall_collisions=1
+
+D_perp=100.0
+D_par=100.0
 D_rot=10.0
 
 xlo=-100.0

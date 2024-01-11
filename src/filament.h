@@ -90,7 +90,7 @@ int filament::length() // number of monomers in the filament
 double filament::contour_length()
 {
     double countourlen;
-    countourlen = 0.0;
+    countourlen = 2.0 * prm.radius;
     if (length() > 1)
     {
         for (int i = 1; i < length(); i++)

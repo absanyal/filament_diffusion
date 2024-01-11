@@ -29,13 +29,19 @@ int main(int argc, char *argv[])
 
     ofstream CoM_disp;
     CoM_disp.open("CoM_displacement.dat");
-    CoM_disp << "#t/tau" << "\t"
-              << "dx" << "\t"
-              << "dy" << "\t"
-              << "dz" << "\t"
-              << "ds^2" << "\t"
-              << endl;
+    CoM_disp << "#t/tau"
+             << "\t"
+             << "dx"
+             << "\t"
+             << "dy"
+             << "\t"
+             << "dz"
+             << "\t"
+             << "ds^2"
+             << "\t"
+             << endl;
 
+    time_info();
 
     for (int t_iter = 0; t_iter < prm.iterations; t_iter++)
     {
