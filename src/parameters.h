@@ -40,6 +40,15 @@ public:
     bool manual_diffusion_constants;
 };
 
+/**
+ * This function reads a file line by line and searches for a specific string match followed by an '=' sign.
+ * If the match is found, it extracts the corresponding value and returns it as a double.
+ * If the match is not found, it prints an error message indicating that the argument is missing in the input file.
+ *
+ * @param file The path of the file to be read.
+ * @param match The string to be matched in the file.
+ * @return The value corresponding to the matched string.
+ */
 double parameters::matchstring(string file, string match)
 {
     string test;
@@ -78,6 +87,13 @@ double parameters::matchstring(string file, string match)
     return amount;
 }
 
+/**
+ * @brief This function reads a file and searches for a specific string match.
+ * 
+ * @param file The path of the file to be read.
+ * @param match The string to be searched for in the file.
+ * @return The string value found after the match.
+ */
 string parameters::matchstring2(string file, string match)
 {
 
@@ -108,6 +124,11 @@ string parameters::matchstring2(string file, string match)
     return amount;
 }
 
+/**
+ * @brief Loads the parameters from the specified input file.
+ * 
+ * @param inputfile The path to the input file.
+ */
 void parameters::load(string inputfile)
 {
     seed = matchstring(inputfile, "seed");
@@ -128,7 +149,7 @@ void parameters::load(string inputfile)
 
     D_par = matchstring(inputfile, "D_par(micro m^2/s)");
     D_perp = matchstring(inputfile, "D_perp(micro m^2/s)");
-    D_rot = matchstring(inputfile, "D_rot(micro m^2/s)");
+    D_rot = matchstring(inputfile, "D_rot(micro rad^2/s)");
 
     eta = matchstring(inputfile, "eta(mPa s)");
 

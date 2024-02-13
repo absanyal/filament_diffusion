@@ -82,6 +82,11 @@ public:
     }
 };
 
+/**
+ * Returns the number of monomers in the filament.
+ *
+ * @return The length of the filament.
+ */
 int filament::length() // number of monomers in the filament
 {
     return monomers.size();

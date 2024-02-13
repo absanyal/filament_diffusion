@@ -46,8 +46,8 @@ p_list = np.linspace(1, 20, 1000)
 j=1.0
 print("D_perp =", D_perp(j))
 print("D_par =", D_par(j))
-print("D_rot =", D_rot(j))
 print("D_0 =", D_Stokes())
+print("D_rot =", D_rot(j))
 print("D_rot_0 =", D_rot_0())
 
 D_par_list = D_par(p_list) / D_Stokes()
