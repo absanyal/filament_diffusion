@@ -68,4 +68,3 @@ void dump_positions(filament f, ofstream &dumpfile, string filament_label, strin
           dump_box(dumpfile);
      }
 }
-

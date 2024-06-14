@@ -1,7 +1,7 @@
 #ifndef MATRIX_H_INCLUDED
 #define MATRIX_H_INCLUDED
 #include <cassert>
-#include<complex>
+#include <complex>
 
 using namespace std;
 
@@ -9,16 +9,16 @@ typedef std::complex<double> cd;
 template <typename T>
 class Matrix
 {
-  public:
+public:
     typedef T value_type;
 
-    //set all elements to zero
+    // set all elements to zero
     Matrix()
         : nrow_(0), ncol_(0)
     {
     }
 
-    //allocate number of row col and elements
+    // allocate number of row col and elements
     Matrix(int nrow, int ncol)
         : nrow_(nrow), ncol_(ncol), data_(nrow * ncol)
     {
@@ -40,16 +40,16 @@ class Matrix
     int n_col();
     void fill(T val);
 
-  private:
+private:
     int nrow_, ncol_;
     std::vector<T> data_;
 };
 
-/*  
+/*
  * ***********
  *  Functions in Class Matrix ------
  *  ***********
-*/
+ */
 
 template <class T>
 int Matrix<T>::n_row()

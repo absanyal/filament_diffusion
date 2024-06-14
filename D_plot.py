@@ -33,17 +33,20 @@ def D_perp(p):
     nu_perp = 0.839 + (0.185/p) + (0.233/(p*p))
     return (kB * T * (nu_perp + log(p))) / (4 * d * p * pi * eta)
 
+
 def D_rot(p):
     deltarot = -0.622 + 0.917/p - 0.050/(p*p)
-    return 3 * kB * T * (deltarot + log(p)) / ( d**3 * p**3 * pi * eta )
+    return 3 * kB * T * (deltarot + log(p)) / (d**3 * p**3 * pi * eta)
+
 
 def D_rot_0():
     return D_Stokes() / (d0 * d0)
 
+
 p_list = np.linspace(1, 20, 1000)
 
 
-j=1.0
+j = 1.0
 print("D_perp =", D_perp(j))
 print("D_par =", D_par(j))
 print("D_0 =", D_Stokes())

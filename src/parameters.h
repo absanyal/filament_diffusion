@@ -89,7 +89,7 @@ double parameters::matchstring(string file, string match)
 
 /**
  * @brief This function reads a file and searches for a specific string match.
- * 
+ *
  * @param file The path of the file to be read.
  * @param match The string to be searched for in the file.
  * @return The string value found after the match.
@@ -126,7 +126,7 @@ string parameters::matchstring2(string file, string match)
 
 /**
  * @brief Loads the parameters from the specified input file.
- * 
+ *
  * @param inputfile The path to the input file.
  */
 void parameters::load(string inputfile)

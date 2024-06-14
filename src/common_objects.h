@@ -18,7 +18,6 @@
 #define eta0 1E-3
 #define sigma0 1E-9
 
-
 parameters prm;
 
 std::mt19937 gen;
