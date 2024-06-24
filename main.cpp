@@ -62,4 +62,6 @@ int main(int argc, char *argv[])
     CoM_disp.close();
 
     wasted_steps_stats();
+
+    cout << "Number of times bounced: " << times_bounced << endl;
 }
