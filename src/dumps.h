@@ -13,6 +13,9 @@
 #include "quaternion.h"
 #include "parameters.h"
 
+double dh = 50.0;
+double dphi = 0.1;
+
 void dump_box(ostream &dump)
 {
      vd rxlo, rxhi, rylo, ryhi, rzlo, rzhi;
@@ -41,16 +44,67 @@ void dump_box(ostream &dump)
           << rzhi[0] << " " << rzhi[1] << " " << rzhi[2] << " 0.5" << endl;
 }
 
-void dump_positions(filament f, ofstream &dumpfile, string filament_label, string monomer_label, bool box = true)
+int cell_particle_count()
 {
-     if (box == true)
+     double rho = prm.cell_radius;
+     double h_lo = prm.xlo;
+     double h_hi = prm.xhi;
+
+     double h;
+     double phi;
+
+     int h_points = int((h_hi - h_lo) / dh);
+     int phi_points = int(2 * M_PI / dphi);
+
+     return h_points * phi_points;
+}
+
+void dump_cell(ofstream &dump)
+{
+     double rho = prm.cell_radius;
+     double h_lo = prm.xlo;
+     double h_hi = prm.xhi;
+
+     double h;
+     double phi;
+
+     int h_points = int((h_hi - h_lo) / dh);
+     int phi_points = int(2 * M_PI / dphi);
+
+     for (int hi = 0; hi < h_points; hi++)
      {
-          dumpfile << f.length() + 7 << endl;
+          h = h_lo + hi * dh;
+          for (int phi_i = 0; phi_i < phi_points; phi_i++)
+          {
+               phi = phi_i * dphi;
+               dump << "cell "
+                    << h << " "
+                    << rho * cos(phi) << " "
+                    << rho * sin(phi) << " "
+                    << "1.0"
+                    << endl;
+          }
+     }
+}
+
+void dump_positions(filament f, ofstream &dumpfile, string filament_label, string monomer_label, bool box = true, bool cell = true)
+
+{
+
+     int box_count = 7 * box;
+
+     int cell_count;
+     if (cell == true)
+     {
+          cell_count = cell_particle_count() * cell;
      }
      else
      {
-          dumpfile << f.length() << endl;
+          cell_count = 0;
      }
+
+     dumpfile << f.length() + box_count + cell_count << endl;
+
      dumpfile << filament_label << endl;
      for (int i = 0; i < f.length(); i++)
      {
@@ -66,5 +120,10 @@ void dump_positions(filament f, ofstream &dumpfile, string filament_label, strin
      if (box == true)
      {
           dump_box(dumpfile);
+     }
+
+     if (cell == true)
+     {
+          dump_cell(dumpfile);
      }
 }
