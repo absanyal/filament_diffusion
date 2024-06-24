@@ -52,6 +52,46 @@ double D_rot(double p)
      return 3.0 * kB0 * prm.T * (delta_rot + log(p)) / (pow(d, 3) * pow(p, 3) * PI * eta);
 }
 
+void report_diffusion_constants(filament f)
+{
+     double p;
+     p = f.contour_length() / f.monomers[0].radius;
+
+     if (prm.manual_diffusion_constants == 0)
+     {
+          cout << "Actual diffusion constants used:" << endl;
+          cout << "D_perp = " << D_perp(p) / micro << " micro m^2/s" << endl;
+          cout << "D_par = " << D_par(p) / micro << " micro m^2/s" << endl;
+          cout << "D_rot = " << D_rot(p) / micro << " micro rad^2/s" << endl;
+          cout << "-----------------------------------" << endl;
+     }
+     else
+     {
+          cout << "Manual diffusion constants used:" << endl;
+          cout << "D_perp = " << prm.D_perp / micro << " micro m^2/s" << endl;
+          cout << "D_par = " << prm.D_par / micro << " micro m^2/s" << endl;
+          cout << "D_rot = " << prm.D_rot / micro << " micro rad^2/s" << endl;
+          cout << "-----------------------------------" << endl;
+     }
+
+     if (prm.manual_diffusion_constants == 0)
+     {
+          cout << "Scaled diffusion constants used:" << endl;
+          cout << "D_perp = " << D_perp(p) / D_0() << endl;
+          cout << "D_par = " << D_par(p) / D_0() << endl;
+          cout << "D_rot = " << D_rot(p) / D_rot_0() << endl;
+          cout << "-----------------------------------" << endl;
+     }
+     else
+     {
+          cout << "Scaled manual diffusion constants used:" << endl;
+          cout << "D_perp = " << prm.D_perp / D_0() << endl;
+          cout << "D_par = " << prm.D_par / D_0() << endl;
+          cout << "D_rot = " << prm.D_rot / D_rot_0() << endl;
+          cout << "-----------------------------------" << endl;
+     }
+}
+
 bool roll_for_attachment(filament f)
 {
      if (!rng_seeded)
