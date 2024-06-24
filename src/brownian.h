@@ -52,6 +52,31 @@ double D_rot(double p)
      return 3.0 * kB0 * prm.T * (delta_rot + log(p)) / (pow(d, 3) * pow(p, 3) * PI * eta);
 }
 
+bool roll_for_attachment()
+{
+     if (!rng_seeded)
+     {
+          gen.seed(prm.seed);
+          rng_seeded = true;
+     }
+     double r;
+     std::uniform_real_distribution<double> dis_uniform(0.0, 1.0);
+     r = dis_uniform(gen);
+
+     double p;
+     // p = 0.005;
+     p = 0.1;
+
+     if (r < p)
+     {
+          return true;
+     }
+     else
+     {
+          return false;
+     }
+}
+
 double brownian_translate(double F_cons_component, double D)
 {
      double c1, c2;
@@ -154,7 +179,7 @@ void perform_step(filament &f)
      rA = {prm.xlo, 0.0, 0.0};
      rB = {prm.xhi, 0.0, 0.0};
 
-     while (end1_in == false || end2_in == false)
+     while ((end1_in == false || end2_in == false) && f.is_attached == false)
      {
           ds_global = global_brownian_displacement(f);
           d_theta_x = global_brownian_angle(f);
@@ -178,8 +203,14 @@ void perform_step(filament &f)
                end2_in = true;
           }
 
-          if (end1_in == false || end2_in == false)
+          if ((end1_in == false || end2_in == false) && f.is_attached == false)
           {
+               f.is_attached = roll_for_attachment();
+          }
+
+          if ((end1_in == false || end2_in == false) && f.is_attached == false)
+          {
+
                f.rotate_filament(-d_theta_y, "y");
                f.rotate_filament(-d_theta_x, "x");
                f.displace_filament(-ds_global);
