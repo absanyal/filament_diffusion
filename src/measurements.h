@@ -33,5 +33,10 @@ void time_info()
      cout << "Time step = " << (tau * prm.dt) / nano << " ns." << endl;
      double total_time;
      total_time = prm.iterations * prm.dt * tau;
-     cout << "Total time for simulation = " << total_time / milli << " ms." << endl;
+     cout << "Total requested time for simulation = " << total_time / milli << " ms." << endl;
+}
+
+double get_tau()
+{
+     return (sigma0 * sigma0) / D_0();
 }
