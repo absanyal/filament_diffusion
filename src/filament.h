@@ -32,6 +32,8 @@ public:
     vd face();
     double radius_of_gyration();
 
+    bool is_attached;
+
     filament(int length, double radius, double mass, vd start_vector, vd heading_vector)
     {
         monomers.resize(length);
@@ -39,6 +41,8 @@ public:
         _face.resize(3);
         force.resize(3);
         start_coord.resize(3);
+
+        is_attached = false;
 
         assert(start_coord.size() == start_vector.size());
         start_coord = start_vector;
