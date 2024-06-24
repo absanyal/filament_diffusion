@@ -52,7 +52,7 @@ double D_rot(double p)
      return 3.0 * kB0 * prm.T * (delta_rot + log(p)) / (pow(d, 3) * pow(p, 3) * PI * eta);
 }
 
-bool roll_for_attachment()
+bool roll_for_attachment(filament f)
 {
      if (!rng_seeded)
      {
@@ -65,7 +65,7 @@ bool roll_for_attachment()
 
      double p;
      // p = 0.005;
-     p = 0.1;
+     p = 0.001;
 
      if (r < p)
      {
@@ -168,9 +168,10 @@ void perform_step(filament &f)
      vd ds_global;
      double d_theta_x, d_theta_y;
 
-     bool end1_in, end2_in;
+     bool end1_in, end2_in, fully_in;
      end1_in = false;
      end2_in = false;
+     fully_in = false;
 
      vd end1, end2;
 
@@ -179,8 +180,59 @@ void perform_step(filament &f)
      rA = {prm.xlo, 0.0, 0.0};
      rB = {prm.xhi, 0.0, 0.0};
 
-     while ((end1_in == false || end2_in == false) && f.is_attached == false)
+     // First make a move
+
+     ds_global = global_brownian_displacement(f);
+     d_theta_x = global_brownian_angle(f);
+     d_theta_y = global_brownian_angle(f);
+
+     f.displace_filament(ds_global);
+     f.rotate_filament(d_theta_x, "x");
+     f.rotate_filament(d_theta_y, "y");
+
+     end1 = f.monomers[0].pos;
+     end2 = f.monomers[f.length() - 1].pos;
+
+     // Check if the ends are inside the cell if wall collisions are enabled
+
+     if (prm.wall_collisions == 1)
      {
+          end1_in = check_inside_cylinder(prm.cell_radius, rA, rB, end1);
+          end2_in = check_inside_cylinder(prm.cell_radius, rA, rB, end2);
+     }
+     else
+     {
+          end1_in = true;
+          end2_in = true;
+     }
+
+     fully_in = end1_in && end2_in;
+
+     // If the ends are not inside the cell, roll for attachment
+
+     if (!fully_in && f.is_attached == false)
+     {
+          f.is_attached = roll_for_attachment(f);
+
+          if (f.is_attached == false)
+          {
+               times_bounced += 1;
+          }
+     }
+
+     // If the ends are not inside the cell and the filament is not attached, undo the move and keep rolling till we end up inside the cell
+
+     while (!fully_in && f.is_attached == false)
+     {
+
+          // first undo the previous move
+
+          f.rotate_filament(-d_theta_y, "y");
+          f.rotate_filament(-d_theta_x, "x");
+          f.displace_filament(-ds_global);
+
+          // make a new move
+
           ds_global = global_brownian_displacement(f);
           d_theta_x = global_brownian_angle(f);
           d_theta_y = global_brownian_angle(f);
@@ -191,6 +243,8 @@ void perform_step(filament &f)
 
           end1 = f.monomers[0].pos;
           end2 = f.monomers[f.length() - 1].pos;
+
+          // check if the ends are inside the cell if wall collisions are enabled
 
           if (prm.wall_collisions == 1)
           {
@@ -203,18 +257,6 @@ void perform_step(filament &f)
                end2_in = true;
           }
 
-          if ((end1_in == false || end2_in == false) && f.is_attached == false)
-          {
-               f.is_attached = roll_for_attachment();
-          }
-
-          if ((end1_in == false || end2_in == false) && f.is_attached == false)
-          {
-
-               f.rotate_filament(-d_theta_y, "y");
-               f.rotate_filament(-d_theta_x, "x");
-               f.displace_filament(-ds_global);
-               wasted_steps += 1;
-          }
+          fully_in = end1_in && end2_in;
      }
 }
