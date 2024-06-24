@@ -24,11 +24,11 @@ int main(int argc, char *argv[])
     initial_CoM = f1.get_CoM();
 
     ofstream dump;
-    dump.open("dump.dat");
+    dump.open("dump/dump.dat");
     dump_positions(f1, dump, "filament1", "m1");
 
     ofstream CoM_disp;
-    CoM_disp.open("CoM_displacement.dat");
+    CoM_disp.open("data/CoM_displacement.dat");
     CoM_disp << "#t/tau"
              << "\t"
              << "dx"
@@ -43,7 +43,8 @@ int main(int argc, char *argv[])
 
     time_info();
 
-    for (int t_iter = 0; t_iter < prm.iterations; t_iter++)
+    int t_iter = 0;
+    while (t_iter < prm.iterations && f1.is_attached == false)
     {
         perform_step(f1);
 
@@ -53,6 +54,8 @@ int main(int argc, char *argv[])
 
             CoM_displacement_sq(f1, initial_CoM, t_iter, CoM_disp);
         }
+
+        t_iter++;
     }
 
     dump.close();
