@@ -61,7 +61,17 @@ int main(int argc, char *argv[])
     dump.close();
     CoM_disp.close();
 
-    wasted_steps_stats();
+    // wasted_steps_stats();
 
     cout << "Number of times bounced: " << times_bounced << endl;
+    if (f1.is_attached == true)
+    {
+        cout << "Filament attached at t = "
+             << (t_iter * prm.dt * get_tau()) / milli
+             << " ms." << endl;
+    }
+    else
+    {
+        cout << "Filament not attached." << endl;
+    }
 }
