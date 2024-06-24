@@ -23,6 +23,7 @@ parameters prm;
 std::mt19937 gen;
 bool rng_seeded = false;
 std::normal_distribution<double> dis_normal(0.0, 1.0);
+std::uniform_real_distribution<double> dis_uniform(0.0, 1.0);
 
 vd X = {1.0, 0.0, 0.0};
 vd Y = {0.0, 1.0, 0.0};
