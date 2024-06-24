@@ -8,8 +8,11 @@ int main(int argc, char *argv[])
     {
         std::cerr << "Enter name of input file";
     }
+    cout << "Reading input file: " << argv[1] << endl;
+    cout << "-----------------------------------" << endl;
     string inputfile = argv[1];
     prm.load(inputfile);
+    cout << "-----------------------------------" << endl;
 
     // initialize filament(s)
     vd f1start, f1head;
@@ -19,6 +22,8 @@ int main(int argc, char *argv[])
     f1head = {0.0, 0.0, 1.0};
 
     filament f1(prm.length, prm.radius, prm.mass, f1start, f1head);
+
+    report_diffusion_constants(f1);
 
     vd initial_CoM;
     initial_CoM = f1.get_CoM();
@@ -62,6 +67,9 @@ int main(int argc, char *argv[])
     CoM_disp.close();
 
     // wasted_steps_stats();
+
+    cout << "Simulation complete." << endl;
+    cout << "-----------------------------------" << endl;
 
     cout << "Number of times bounced: " << times_bounced << endl;
     if (f1.is_attached == true)
