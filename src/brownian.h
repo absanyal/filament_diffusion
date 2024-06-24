@@ -60,17 +60,17 @@ void report_diffusion_constants(filament f)
      if (prm.manual_diffusion_constants == 0)
      {
           cout << "Actual diffusion constants used:" << endl;
-          cout << "D_perp = " << D_perp(p) / micro << " micro m^2/s" << endl;
-          cout << "D_par = " << D_par(p) / micro << " micro m^2/s" << endl;
-          cout << "D_rot = " << D_rot(p) / micro << " micro rad^2/s" << endl;
+          cout << "D_perp = " << D_perp(p) / (micro * micro) << " micro m^2/s" << endl;
+          cout << "D_par = " << D_par(p) / (micro * micro) << " micro m^2/s" << endl;
+          cout << "D_rot = " << D_rot(p) / (micro * micro) << " micro rad^2/s" << endl;
           cout << "-----------------------------------" << endl;
      }
      else
      {
           cout << "Manual diffusion constants used:" << endl;
-          cout << "D_perp = " << prm.D_perp / micro << " micro m^2/s" << endl;
-          cout << "D_par = " << prm.D_par / micro << " micro m^2/s" << endl;
-          cout << "D_rot = " << prm.D_rot / micro << " micro rad^2/s" << endl;
+          cout << "D_perp = " << prm.D_perp / (micro * micro) << " micro m^2/s" << endl;
+          cout << "D_par = " << prm.D_par / (micro * micro) << " micro m^2/s" << endl;
+          cout << "D_rot = " << prm.D_rot / (micro * micro) << " micro rad^2/s" << endl;
           cout << "-----------------------------------" << endl;
      }
 
