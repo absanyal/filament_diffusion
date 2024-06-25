@@ -60,17 +60,23 @@ void report_diffusion_constants(filament f)
      if (prm.manual_diffusion_constants == 0)
      {
           cout << "Actual diffusion constants used:" << endl;
-          cout << "D_perp = " << D_perp(p) / (micro * micro) << " micro m^2/s" << endl;
-          cout << "D_par = " << D_par(p) / (micro * micro) << " micro m^2/s" << endl;
-          cout << "D_rot = " << D_rot(p) / (micro * micro) << " micro rad^2/s" << endl;
+          cout << "D_perp = " << D_perp(p) / (micro * micro)
+               << " micro m^2/s" << endl;
+          cout << "D_par = " << D_par(p) / (micro * micro)
+               << " micro m^2/s" << endl;
+          cout << "D_rot = " << D_rot(p) / (micro * micro)
+               << " micro rad^2/s" << endl;
           cout << "-----------------------------------" << endl;
      }
      else
      {
           cout << "Manual diffusion constants used:" << endl;
-          cout << "D_perp = " << prm.D_perp / (micro * micro) << " micro m^2/s" << endl;
-          cout << "D_par = " << prm.D_par / (micro * micro) << " micro m^2/s" << endl;
-          cout << "D_rot = " << prm.D_rot / (micro * micro) << " micro rad^2/s" << endl;
+          cout << "D_perp = " << prm.D_perp / (micro * micro)
+               << " micro m^2/s" << endl;
+          cout << "D_par = " << prm.D_par / (micro * micro)
+               << " micro m^2/s" << endl;
+          cout << "D_rot = " << prm.D_rot / (micro * micro)
+               << " micro rad^2/s" << endl;
           cout << "-----------------------------------" << endl;
      }
 
@@ -103,8 +109,9 @@ bool roll_for_attachment(filament f)
      std::uniform_real_distribution<double> dis_uniform(0.0, 1.0);
      r = dis_uniform(gen);
 
+     // TODO: Implement probability of attachment as a function of angle between filament and cell wall
+
      double p;
-     // p = 0.005;
      p = 0.001;
 
      if (r < p)
