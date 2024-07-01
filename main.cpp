@@ -74,8 +74,9 @@ int main(int argc, char *argv[])
     cout << "Number of times bounced: " << times_bounced << endl;
     if (f1.is_attached == true)
     {
+        double attach_time = (t_iter * prm.dt * get_tau()) / milli;
         cout << "Filament attached at t = "
-             << (t_iter * prm.dt * get_tau()) / milli
+             << attach_time
              << " ms." << endl;
     }
     else
