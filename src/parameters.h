@@ -36,6 +36,8 @@ public:
 
     double eta;
 
+    double k_react;
+
     bool wall_collisions;
     bool manual_diffusion_constants;
 };
@@ -142,6 +144,8 @@ void parameters::load(string inputfile)
 
     // kB = matchstring(inputfile, "kB");
     T = matchstring(inputfile, "T(kelvin)");
+
+    k_react = matchstring(inputfile, "k_react");
 
     wall_collisions = matchstring(inputfile, "wall_collisions");
 

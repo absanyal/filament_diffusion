@@ -12,6 +12,7 @@ int main(int argc, char *argv[])
     cout << "-----------------------------------" << endl;
     string inputfile = argv[1];
     prm.load(inputfile);
+    cout << "Attachment probability: " << 1.0 - exp(-prm.k_react * prm.dt) << endl;
     cout << "-----------------------------------" << endl;
 
     // initialize filament(s)

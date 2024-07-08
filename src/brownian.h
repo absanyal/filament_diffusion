@@ -109,10 +109,9 @@ bool roll_for_attachment(filament f)
      std::uniform_real_distribution<double> dis_uniform(0.0, 1.0);
      r = dis_uniform(gen);
 
-     // TODO: Implement probability of attachment as a function of angle between filament and cell wall
-
      double p;
-     p = 0.001;
+     p = 1.0 - exp(-prm.k_react * prm.dt);
+     // p = 0.01;
 
      if (r < p)
      {
