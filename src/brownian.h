@@ -56,6 +56,11 @@ void report_diffusion_constants(filament f)
 {
      double p;
      p = f.contour_length() / f.monomers[0].radius;
+     
+     cout << "Diffusion constant scaling factors:" << endl;
+     cout << "D_0 = " << D_0() << " m^2/s" << endl;
+     cout << "D_rot_0 = " << D_rot_0() << " rad^2/s" << endl;
+     cout << "-----------------------------------" << endl;
 
      if (prm.manual_diffusion_constants == 0)
      {
