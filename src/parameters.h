@@ -16,6 +16,8 @@ class parameters
 public:
     int seed;
 
+    int simulation_number;
+
     int length;
     double radius, mass;
 
@@ -134,6 +136,8 @@ string parameters::matchstring2(string file, string match)
 void parameters::load(string inputfile)
 {
     seed = matchstring(inputfile, "seed");
+
+    simulation_number = matchstring(inputfile, "simulation_number");
 
     length = matchstring(inputfile, "length(subunits)");
     radius = matchstring(inputfile, "radius(nm)");
