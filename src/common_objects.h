@@ -31,3 +31,4 @@ vd Z = {0.0, 0.0, 1.0};
 
 int wasted_steps = 0;
 int times_bounced = 0;
+double attach_time = 0.0;
