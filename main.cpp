@@ -30,11 +30,11 @@ int main(int argc, char *argv[])
     initial_CoM = f1.get_CoM();
 
     ofstream dump;
-    dump.open("dump/dump.dat");
+    dump.open("dump/dump." + to_string(prm.simulation_number) + ".dat");
     dump_positions(f1, dump, "filament1", "m1");
 
     ofstream CoM_disp;
-    CoM_disp.open("data/CoM_displacement.dat");
+    CoM_disp.open("data/CoM_displacement." + to_string(prm.simulation_number) + ".dat");
     CoM_disp << "#t/tau"
              << "\t"
              << "dx"
@@ -72,16 +72,24 @@ int main(int argc, char *argv[])
     cout << "Simulation complete." << endl;
     cout << "-----------------------------------" << endl;
 
+    ofstream attach_time_file;
+    attach_time_file.open("data/attach_time." + to_string(prm.simulation_number) + ".dat");
+    attach_time_file << "#Attach time (ms) \t Number of times bounced" << endl;
+    
     cout << "Number of times bounced: " << times_bounced << endl;
     if (f1.is_attached == true)
     {
-        double attach_time = (t_iter * prm.dt * get_tau()) / milli;
+        attach_time = (t_iter * prm.dt * get_tau()) / milli;
         cout << "Filament attached at t = "
              << attach_time
              << " ms." << endl;
+
+        attach_time_file << attach_time << "\t" << times_bounced << endl;
+        attach_time_file.close();
     }
     else
     {
         cout << "Filament not attached." << endl;
+        attach_time_file << "-1" << "\t" << times_bounced << endl;
     }
 }
