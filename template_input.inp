@@ -1,14 +1,14 @@
-seed=10
+simulation_number=1
+seed=100
 
 length(subunits)=20
 radius(nm)=2.5
 mass(FtsZ mass)=1.0
 
 iterations=10000000
-dt=1
+dt=1.0
 
 T(kelvin)=310.0
-
 wall_collisions=1
 
 manual_diffusion_constants=0
@@ -19,10 +19,10 @@ D_rot(micro rad^2/s)=0.0
 
 eta(mPa s)=0.6913
 
-k_react=0.001
+k_react=0.01
 
 xlo(nm)=-500.0
 xhi(nm)=500.0
-cell_radius(nm)=300.0
+cell_radius(nm)=350.0
 
 steps_to_skip=100

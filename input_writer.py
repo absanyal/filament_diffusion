@@ -103,55 +103,55 @@ for sim_i in range(1, n_sims_total + 1):
     seed_str = str(np.random.randint(0, n_sims_total * 100000))
 
     # Write the input file
-    with open("input_files/input_" + sim_i_str + ".txt", "w") as file:
+    with open("input_files/input.{}.inp".format(sim_i_str), "w") as file:
 
         file.write("simulation_number={}\n".format(sim_i_str))
         file.write("seed={}\n".format(seed_str))
-        
+
         file.write("\n")
 
-        file.write("length={}\n".format(length))
-        file.write("radius={}\n".format(radius))
-        file.write("mass={}\n".format(mass))
-        
+        file.write("length(subunits)={}\n".format(length))
+        file.write("radius(nm)={}\n".format(radius))
+        file.write("mass(FtsZ mass)={}\n".format(mass))
+
         file.write("\n")
 
         file.write("iterations={}\n".format(iterations_list[0]))
         file.write("dt={}\n".format(dt_list[0]))
-        
+
         file.write("\n")
 
-        file.write("T={}\n".format(T))
-        
+        file.write("T(kelvin)={}".format(T))
+
         file.write("\n")
 
         file.write("wall_collisions={}\n".format(wall_collisions))
-        
+
         file.write("\n")
 
         file.write("manual_diffusion_constants={}\n".format(
             manual_diffusion_constants))
-        
+
         file.write("\n")
 
-        file.write("D_perp={}\n".format(D_perp))
-        file.write("D_par={}\n".format(D_par))
-        file.write("D_rot={}\n".format(D_rot))
-        
+        file.write("D_perp(micro m^2/s)={}\n".format(D_perp))
+        file.write("D_par(micro m^2/s)={}\n".format(D_par))
+        file.write("D_rot(micro rad^2/s)={}\n".format(D_rot))
+
         file.write("\n")
 
-        file.write("eta={}\n".format(eta))
-        
+        file.write("eta(mPa s)={}\n".format(eta))
+
         file.write("\n")
 
         file.write("k_react={}\n".format(kreact_list[0]))
-        
+
         file.write("\n")
 
-        file.write("xlo={}\n".format(xlo))
-        file.write("xhi={}\n".format(xhi))
-        file.write("cell_radius={}\n".format(cell_radius))
-        
+        file.write("xlo(nm)={}\n".format(xlo))
+        file.write("xhi(nm)={}\n".format(xhi))
+        file.write("cell_radius(nm)={}\n".format(cell_radius))
+
         file.write("\n")
 
         file.write("steps_to_skip={}\n".format(steps_to_skip))

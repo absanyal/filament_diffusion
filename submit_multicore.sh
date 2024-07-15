@@ -14,7 +14,7 @@ mkdir -p dump
 make clean
 make
 
-nres=1050
+nres=1
 
 for sim_i in {1..${nres}}
 do
