@@ -9,4 +9,5 @@
 !*.py
 !*gp
 !*.sh
+!batch_analysis*
 test*
