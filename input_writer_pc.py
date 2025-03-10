@@ -1,34 +1,26 @@
 from matplotlib.ticker import ScalarFormatter
 import numpy as np
-
-import matplotlib as mpl
-
-mpl.rcParams['axes.labelsize'] = 20
-mpl.rcParams['xtick.labelsize'] = 20
-mpl.rcParams['ytick.labelsize'] = 20
-mpl.rcParams['legend.fontsize'] = 14
+import sys
+import modules.rcparams
 
 
 ###################################################################
 
 # Job information
 
-n_cores_per_node = 42
+args = sys.argv[1:]
 
-n_cores_per_sim = 1
-n_sims_total = 1050
+if len(args) < 1:
+    print("Usage: python input_writer_pc.py <number of simulations>")
+    sys.exit(1)
+elif len(args) > 1:
+    print("Usage: python input_writer_pc.py <number of simulations>")
+    sys.exit(1)
+else:
+    n_sims_total = int(args[0])
 
-n_sims_per_node = int(n_cores_per_node / n_cores_per_sim)
-number_of_empty_cores = n_cores_per_node % n_cores_per_sim
 
-n_nodes_required = int(n_sims_total / n_sims_per_node)
-
-print("Number of cores per simulation: {}".format(n_cores_per_sim))
-print("Total number of simulations: {}".format(n_sims_total))
-print()
-print("Number of sims per node: {}".format(n_sims_per_node))
-print("Number of empty cores: {}".format(number_of_empty_cores))
-print("Number of nodes required: {}".format(n_nodes_required))
+print("Number of simulations: {}".format(n_sims_total))
 
 print("---------------------------------")
 
@@ -46,9 +38,6 @@ length = 20
 radius = 2.5
 mass = 1.0
 
-# iterations = 10000000
-# dt=1
-
 T = 310.0
 
 wall_collisions = 1
@@ -61,36 +50,19 @@ D_rot = 0.0
 
 eta = 0.6913
 
-# k_react=0.001
-
 xlo = -500.0
 xhi = 500.0
 cell_radius = 350.0
 
 steps_to_skip = 100
 
-###################################################################
-
-# Set changing parameters here
-
-print("Setting up changing parameters...")
-print("---------------------------------")
-
 kdt = 0.01
+dt = 1.0
+kreact = kdt / dt
+P = kreact * dt
 
-dt_list = [1.0]
-kreact_list = [kdt / dt for dt in dt_list]
-iterations_list = [int(10000000 / dt) for dt in dt_list]
-P_list = []
-for i in range(len(dt_list)):
-    P_list.append(kreact_list[i] * dt_list[i])
+iterations = 10_000_000
 
-print("Required kdt: {}".format(kdt))
-
-print("dt = {}".format(dt_list))
-print("kreact = {}".format(kreact_list))
-print("P = {}".format(P_list))
-print("iterations = {}".format(iterations_list))
 
 
 ###################################################################
@@ -103,7 +75,7 @@ for sim_i in range(1, n_sims_total + 1):
     seed_str = str(np.random.randint(0, n_sims_total * 100000))
 
     # Write the input file
-    with open("input_files/input.{}.inp".format(sim_i_str), "w") as file:
+    with open("input_files_pc/input.{}.inp".format(sim_i_str), "w") as file:
 
         file.write("simulation_number={}\n".format(sim_i_str))
         file.write("seed={}\n".format(seed_str))
@@ -116,8 +88,8 @@ for sim_i in range(1, n_sims_total + 1):
 
         file.write("\n")
 
-        file.write("iterations={}\n".format(iterations_list[0]))
-        file.write("dt={}\n".format(dt_list[0]))
+        file.write("iterations={}\n".format(iterations))
+        file.write("dt={}\n".format(dt))
 
         file.write("\n")
 
@@ -144,7 +116,7 @@ for sim_i in range(1, n_sims_total + 1):
 
         file.write("\n")
 
-        file.write("k_react={}\n".format(kreact_list[0]))
+        file.write("k_react={}\n".format(kreact))
 
         file.write("\n")
 
