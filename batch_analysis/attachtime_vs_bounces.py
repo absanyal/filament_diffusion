@@ -33,30 +33,76 @@ for sim_i in range(sim_count):
 
 print("Number of successful attach times: {}".format(successful_attach_times))
 
-fig, ax = plt.subplots(1, 3, figsize=(12, 4))
+# fig, ax = plt.subplots(1, 3, figsize=(12, 4))
 
-ax[0].scatter(attach_times, bounces, s=10, c='k', alpha=0.5)
-ax[0].set_xlabel("Attachment time (ms)")
-ax[0].set_ylabel("Number of bounces")
+# ax[0].scatter(attach_times, bounces, s=10, c='k', alpha=0.5)
+# ax[0].set_xlabel("Attachment time (ms)")
+# ax[0].set_ylabel("Number of bounces")
 
-ax[1].hist(attach_times, bins='auto', color='k', alpha=0.5)
-ax[1].set_xlabel("Attachment time (ms)")
-ax[1].set_ylabel("Frequency")
+# ax[1].hist(attach_times, bins='auto', color='k', alpha=0.5)
+# ax[1].set_xlabel("Attachment time (ms)")
+# ax[1].set_ylabel("Frequency")
+
+# avg_attach_time = np.mean(attach_times)
+
+# ax[1].axvline(avg_attach_time, color='r', linestyle='--', label="Average attach time: {:.2f} ms".format(avg_attach_time))
+# ax[1].legend()
+
+# ax[2].hist(bounces, bins='auto', color='k', alpha=0.5)
+# ax[2].set_xlabel("Number of bounces")
+# ax[2].set_ylabel("Frequency")
+
+# avg_bounces = np.mean(bounces)
+
+# ax[2].axvline(avg_bounces, color='r', linestyle='--', label="Average bounces: {:.2f}".format(avg_bounces))
+# ax[2].legend()
+
+# plt.tight_layout()
+
+plt.figure(figsize=(5, 5))
+
+plt.scatter(attach_times, bounces, s=10, c='k', alpha=0.5, lw=0)
+
+plt.yscale('log')
+plt.xscale('log')
+
+plt.xlabel("Attachment time (ms)")
+plt.ylabel("Number of bounces")
+
+plt.savefig("attachtime_vs_bounces.pdf", format='pdf', bbox_inches='tight')
+
+plt.clf()
+plt.cla()
+
+plt.figure(figsize=(5, 5))
+
+plt.hist(attach_times, bins='auto', color='b', alpha=0.5)
+
+plt.xlabel("Attachment time (ms)")
+plt.ylabel("Frequency")
 
 avg_attach_time = np.mean(attach_times)
 
-ax[1].axvline(avg_attach_time, color='r', linestyle='--', label="Average attach time: {:.2f} ms".format(avg_attach_time))
-ax[1].legend()
+plt.axvline(avg_attach_time, color='r', linestyle='--', label="Average attach time: {:.2f} ms".format(avg_attach_time))
 
-ax[2].hist(bounces, bins='auto', color='k', alpha=0.5)
-ax[2].set_xlabel("Number of bounces")
-ax[2].set_ylabel("Frequency")
+plt.legend()
+
+plt.savefig("attachtime_hist.pdf", format='pdf', bbox_inches='tight')
+
+plt.clf()
+plt.cla()
+
+plt.figure(figsize=(5, 5))
+
+plt.hist(bounces, bins='auto', color='b', alpha=0.5)
+
+plt.xlabel("Number of bounces")
+plt.ylabel("Frequency")
 
 avg_bounces = np.mean(bounces)
 
-ax[2].axvline(avg_bounces, color='r', linestyle='--', label="Average bounces: {:.2f}".format(avg_bounces))
-ax[2].legend()
+plt.axvline(avg_bounces, color='r', linestyle='--', label="Average bounces: {:.2f}".format(avg_bounces))
 
-plt.tight_layout()
+plt.legend()
 
-plt.show()
+plt.savefig("bounces_hist.pdf", format='pdf', bbox_inches='tight')
