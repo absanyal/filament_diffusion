@@ -56,7 +56,7 @@ cell_radius = 350.0
 
 steps_to_skip = 100
 
-kdt = 0.01
+kdt = 0.125
 dt = 1.0
 kreact = kdt / dt
 P = kreact * dt
